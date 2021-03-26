@@ -1,5 +1,8 @@
 package me.pgb.a2021_03_26_boundbackgroundservice.service;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +27,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String CHANNEL_DEFAULT_IMPORTANCE = "notification action high";
+    private static final Object ONGOING_NOTIFICATION_ID = 1;
     private RadioService mService;
     private boolean mBound = false;
     private Button binderButton;
@@ -77,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         Intent intent = new Intent(this, RadioService.class);
         intent.putExtra("data", "Hello!");
+
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
 

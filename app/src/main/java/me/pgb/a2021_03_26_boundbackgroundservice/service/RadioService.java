@@ -71,7 +71,15 @@ public class RadioService extends Service {
                             }
                         }
                     };
-                    backgroundThread.start();
+                    if (!keepRunning) {
+                        try {
+                            backgroundThread.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        backgroundThread.start();
+                    }
                 }
             }
 
@@ -87,7 +95,7 @@ public class RadioService extends Service {
         super.onCreate();
         Log.i(TAG,"onCreate()");
 
-        HandlerThread thread = new HandlerThread("My Thread", Process.THREAD_PRIORITY_FOREGROUND);
+        HandlerThread thread = new HandlerThread("My Thread", Process.THREAD_PRIORITY_BACKGROUND);
 
         thread.start();
         Looper looper = thread.getLooper();
@@ -105,7 +113,9 @@ public class RadioService extends Service {
 
         Log.i(TAG,"onStartCommand");
 
-        if(intent != null) { // May not have an Intent is the service was killed and restarted (See STICKY_SERVICE).
+        if(intent != null) {
+            // May not have an Intent is the service was killed and restarted
+            // (See STICKY_SERVICE).
             Log.i(TAG,"do stuff in onStartCommand");
         }
 
